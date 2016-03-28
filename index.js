@@ -92,12 +92,14 @@ function search(options, callback) {
     var results = [];
     var $ = cheerio.load(body);
 
-    $('.g h3 a').each(function(i, elem) {
-      var parsed = url.parse(elem.attribs.href, true);
+    var arr = $('.g h3 a').toArray();
+    
+    for (var t = 0; t < arr.length; t++) {
+      var parsed = url.parse(arr[t].attribs.href, true);
       if (parsed.pathname === '/url') {
-        results.push(parsed.query.q);
+        results.push({link: parsed.query.q, title: $(arr[t]).text()});
       }
-    });
+    }
 
     return results;
   }
